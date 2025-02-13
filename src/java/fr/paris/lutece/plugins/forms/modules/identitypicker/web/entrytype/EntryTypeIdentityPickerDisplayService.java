@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.forms.modules.identitypicker.web.entrytype;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -54,7 +55,17 @@ import fr.paris.lutece.plugins.forms.web.entrytype.IEntryDisplayService;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.AttributeKeyDto;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.AuthorType;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.RequestAuthor;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.referentiel.AttributeSearchResponse;
+import fr.paris.lutece.plugins.identitystore.v3.web.service.ReferentialService;
+import fr.paris.lutece.plugins.identitystore.web.exception.IdentityStoreException;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.ReferenceList;
 
 /**
  * The default display service
@@ -68,6 +79,7 @@ public class EntryTypeIdentityPickerDisplayService implements IEntryDisplayServi
 	private static final String MARK_MAP_ATTRIBUTES = "mapAttributes";
 	private static final String MARK_MODIFY_IDENTITY = "bModifyIdentity";
 	private static final String MARK_CREATE_IDENTITY = "bCreateIdentity";
+	private static final String MARK_MAP_ATTRIBUTES_NAME = "mapAttributesName";
 	
 	private static final String FIELD_ATTRIBUTES = "lst_attributes";
 	private static final String FIELD_PREFIX = "my-form-";
@@ -121,10 +133,47 @@ public class EntryTypeIdentityPickerDisplayService implements IEntryDisplayServi
         model.put( MARK_MAP_ATTRIBUTES, mapAttributes );
         model.put( MARK_MODIFY_IDENTITY, entry.getFieldByCode("modify_identity").getValue( ) );
         model.put( MARK_CREATE_IDENTITY, entry.getFieldByCode("create_identity").getValue( ) );
+        model.put( MARK_MAP_ATTRIBUTES_NAME, getIdentityAttributesMap() );
         
     	model.put( FormsConstants.QUESTION_ENTRY_MARKER, entry );
 
         return model;
+    }
+    
+    /**
+     * Builds the {@link ReferenceList} of all attributes available in the identity store
+     * 
+     * @return the {@link ReferenceList}
+     */
+    public Map<String, String> getIdentityAttributesMap( )
+    {
+    	ReferentialService _referentialService;
+    	String BEAN_REFERENTIAL_SERVICE = "identity.ReferentialService";
+    	String PROPERTY_CLIENT_CODE = "identitypicker.default.client.code";
+    	
+    	RequestAuthor author = new RequestAuthor( );
+        author.setType( AuthorType.admin );
+        author.setName( AppPropertiesService.getProperty( PROPERTY_CLIENT_CODE) );
+    	
+    	_referentialService = SpringContextService.getBean( BEAN_REFERENTIAL_SERVICE );
+    	AttributeSearchResponse attributeKeyList = null;
+    	Map<String,String> lstAttributes = new HashMap<String, String>();
+    	
+    	try {
+			attributeKeyList = _referentialService.getAttributeKeyList( AppPropertiesService.getProperty( PROPERTY_CLIENT_CODE), author );
+		} catch (IdentityStoreException e) {
+			AppLogService.error(e);
+		}
+    	
+    	List<AttributeKeyDto> attributeKeys = attributeKeyList.getAttributeKeys();
+        
+        for (AttributeKeyDto attr : attributeKeys)
+		{
+			lstAttributes.put( attr.getKeyName(), attr.getName( ));
+			
+		}
+    	
+        return lstAttributes;
     }
 
     /**
