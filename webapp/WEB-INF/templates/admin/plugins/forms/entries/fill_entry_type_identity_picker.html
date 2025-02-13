@@ -36,7 +36,7 @@
 <@input type="hidden" id="field_customer_id" name="field_customer_id" />
 
 <#list lstAttributes as attribute>
-	<@formGroup labelFor='${attribute}' labelKey='${attribute}' helpKey=entry.helpMessage!'' groupStyle=groupStyle!'' >
+	<@formGroup labelFor='${attribute}' labelKey='${mapAttributesName[attribute]}' helpKey=entry.helpMessage!'' groupStyle=groupStyle!'' >
 		<@input type="text" id="my-form-${attribute}" readonly=true name="${attribute}" />
 	</@formGroup>
 </#list>
