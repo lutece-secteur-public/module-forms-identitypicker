@@ -19,7 +19,8 @@
                 </@p>
             <#else>
             	<#if cpt != 0 >
-               	   <@p>${mapAttributesName[lstAttributes[cpt - 1]]} : ${response.toStringValueResponse!''}</@p>
+               	   <#assign responseAttr = getResponseContainingTheFieldWithCode( list_responses, lstAttributes[cpt - 1] ).toStringValueResponse >
+               	   <@p>${mapAttributesName[lstAttributes[cpt - 1]]} : ${responseAttr!''}</@p>
                </#if>
                
             </#if>
@@ -34,7 +35,7 @@
 			</@p>
             <#assign cptAttributes=cptAttributes+1>
 		</#list>
-		<@identityPicker fieldMappings=JSONAttributes cuid=list_responses[0].toStringValueResponse  autoFill=true btnLabel='Voir identité'/>
+		<@identityPicker fieldMappings=JSONAttributes cuid=list_responses[0].toStringValueResponse  autoFill=true btnLabel='#i18n{module.forms.identitypicker.readEntry.readIdPicker}'/>
     </#if>
     </#if>
     
