@@ -7,7 +7,7 @@
         >
 
 
-	<bean id="forms.entryTypeIdentityPicker" class="fr.paris.lutece.plugins.forms.modules.identitypicker.service.entrytype.EntryTypeIdentityPicker" >
+	<bean id="forms-identitypicker.entryTypeIdentityPicker" class="fr.paris.lutece.plugins.forms.modules.identitypicker.service.entrytype.EntryTypeIdentityPicker" >
 	<property name="anonymizationTypes">
             <list>
                 <ref bean="genericattributes.entryIdAnonymizationType" />
@@ -24,12 +24,12 @@
     </bean>
 	
 	
-	<bean id="forms.entryTypeIdentityPickerDisplayService" class="fr.paris.lutece.plugins.forms.modules.identitypicker.web.entrytype.EntryTypeIdentityPickerDisplayService">
-		<constructor-arg  type="java.lang.String" value="forms.entryTypeIdentityPicker" />
+	<bean id="forms-identitypicker.entryTypeIdentityPickerDisplayService" class="fr.paris.lutece.plugins.forms.modules.identitypicker.web.entrytype.EntryTypeIdentityPickerDisplayService">
+		<constructor-arg  type="java.lang.String" value="forms-identitypicker.entryTypeIdentityPicker" />
 	</bean>
 	
-    <bean id="forms.entryTypeIdentityPickerService" class="fr.paris.lutece.plugins.forms.web.entrytype.EntryTypeDefaultDataService">
-		<constructor-arg  type="java.lang.String" value="forms.entryTypeIdentityPicker" />
+    <bean id="forms-identitypicker.entryTypeIdentityPickerService" class="fr.paris.lutece.plugins.forms.web.entrytype.EntryTypeDefaultDataService">
+		<constructor-arg  type="java.lang.String" value="forms-identitypicker.entryTypeIdentityPicker" />
 	</bean>
 		
 </beans>
