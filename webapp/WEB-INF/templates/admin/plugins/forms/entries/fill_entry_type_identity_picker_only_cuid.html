@@ -42,7 +42,7 @@
 </#list>
 
 <@formGroup labelFor='idpicker' helpKey=entry.helpMessage!'' groupStyle=groupStyle!'' >
-	<@identityPicker fieldMappings=JSONAttributes creation=bCreateIdentity?boolean update=bModifyIdentity?boolean btnLabel='#i18n{module.forms.identitypicker.fillEntry.labelIdPicker}' />
+	<@identityPicker fieldMappings=JSONAttributes createTask=true creation=bCreateIdentity?boolean update=bModifyIdentity?boolean btnLabel='#i18n{module.forms.identitypicker.fillEntry.labelIdPicker}' />
 </@formGroup>
 
 
